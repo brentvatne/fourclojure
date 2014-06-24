@@ -139,4 +139,63 @@
       (is (= (my-nth [1 2 3 4] 1) 2))
       (is (= (my-nth '([1 2] [3 4] [5 6]) 2) [5 6])))))
 
+(deftest number-22
+  (testing "Write a function which returns the total number of elements in a
+           sequence. ** Do not use count"
+    ;;
+    ;; Just use reduce!
+    ;; reduce (fn [n _] (inc n)) 0
+    ;;
+    (let [count-it (fn [coll]
+            (loop [n 0 remaining (vec coll)]
+              (if-not (seq remaining) n (recur (inc n) (rest remaining)))))]
+      (is (= (count-it '(1 2 3 3 1)) 5))
+      (is (= (count-it "Hello World") 11))
+      (is (= (count-it [[1 2] [3 4] [5 6]]) 3))
+      (is (= (count-it '(13)) 1))
+      (is (= (count-it '(:a :b :c)) 3)))))
+
+(deftest number-23
+  (testing "Write a function which reverses a sequence."
+    ;;
+    ;; Just use reduce and conj!
+    ;; reduce conj ()
+    ;; or apply and conj
+    ;; apply conj ()
+    ;;
+    ;; conj with a list: prepends
+    ;; conj with a vector: append
+    ;; conj is variadic - it can take any number of arguments, whereas
+    ;; cons cannot. That is why the seq comes first for conj. cons
+    ;; works as you expect for lists, and conj works as you expected
+    ;; for vectors.
+    ;;
+    ;; Note that in these cases, reduce just takes some function that accepts
+    ;; two arguments in the expected order: result, item. Conj works for this because
+    ;; the collection (result) comes first, and then the item
+    ;;
+    (let [reverse-it (partial reduce conj ())]
+      (is (= (reverse-it [1 2 3 4 5]) [5 4 3 2 1] ))
+      (is (= (reverse-it (sorted-set 5 7 2 7)) '(7 5 2)))
+      ; (is (= (reverse-it ([[1 2][3 4][5 6]]  [[5 6][3 4][1 2]]))))
+      )))
+
+;; 24 is too easy: just apply + or reduce +
+;; 25 is too easy: just filter odd?
+
+(deftest number-26
+  (testing "Write a function which returns the first X fibonacci numbers."
+    ;;
+    ;; This one was interesting. The actual solution I submitted was this:
+    ;; (letfn [(fib [n] (if (<= n 1)
+    ;;                       1
+    ;;                       (+ (fib (dec n)) (fib (- n 2)))))]
+    ;;    #(apply list (map fib (range %)))
+    ;;
+    (letfn [(fib [n] (if (<= n 1) 1 (+ (fib (dec n)) (fib (- n 2)))))
+            (fib-seq [n] (apply list (map fib (range n))))]
+      (is (= (fib-seq 3) '(1 1 2)))
+      (is (= (fib-seq 6) '(1 1 2 3 5 8)))
+      (is (= (fib-seq 8) '(1 1 2 3 5 8 13 21))))))
+
 (run-tests)
