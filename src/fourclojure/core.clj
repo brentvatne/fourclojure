@@ -198,4 +198,17 @@
       (is (= (fib-seq 6) '(1 1 2 3 5 8)))
       (is (= (fib-seq 8) '(1 1 2 3 5 8 13 21))))))
 
+(deftest number-27
+  (testing "Write a function which returns true if the given sequence is a palindrome."
+    (letfn [(palindrome? [value] (= (seq value) (reverse value)))]
+      (is (false? (palindrome? '(1 2 3 4 5))))
+      (is (true?  (palindrome? "racecar"))))))
+
+
+(deftest number-35
+  (testing "Clojure lets you give local names to values using the special let-form."
+    (is (= 7 (let [x 5] (+ 2 x))))
+    (is (= 7 (let [x 3 y 10] (- y x))))
+    (is (= 7 (let [x 21] (let [y 3] (/ x y)))))))
+
 (run-tests)
